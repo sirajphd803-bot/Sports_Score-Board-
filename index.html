@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GHS TRIKKULAM - Annual Sports Meet 2026-27</title>
+    <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <!-- Google Fonts Import -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -292,6 +295,26 @@
 
     <!-- Application Script -->
     <script>
+    // Firebase Setup
+    const firebaseConfig = {
+      apiKey: "AIzaSyC7kBwCZeg0SEwCJETmX_MLIpeQVRxK1f4",
+      authDomain: "digital-score-board.firebaseapp.com",
+      databaseURL: "https://digital-score-board-default-rtdb.firebaseio.com",
+      projectId: "digital-score-board",
+      storageBucket: "digital-score-board.firebasestorage.app",
+      messagingSenderId: "98092548634",
+      appId: "1:98092548634:web:53a5b6f1c4bfd0e82f07a3"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+    const sportsRef = database.ref('sportsData');
+
+    // നിങ്ങളുടെ പഴയ കോഡ് ഇവിടെ തുടരുന്നു
+    const categories = [
+        "Junior Boys", "Junior Girls",
+        ...
+        
         const categories = [
             "Junior Boys", "Junior Girls",
             "Sub Junior Boys", "Sub Junior Girls",
