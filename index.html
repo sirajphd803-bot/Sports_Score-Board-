@@ -292,29 +292,24 @@
             </form>
         </div>
     </div>
-
-    <!-- Application Script -->
+        <!-- Application Script -->
     <script>
-    // Firebase Setup
-    const firebaseConfig = {
-      apiKey: "AIzaSyC7kBwCZeg0SEwCJETmX_MLIpeQVRxK1f4",
-      authDomain: "digital-score-board.firebaseapp.com",
-      databaseURL: "https://digital-score-board-default-rtdb.firebaseio.com",
-      projectId: "digital-score-board",
-      storageBucket: "digital-score-board.firebasestorage.app",
-      messagingSenderId: "98092548634",
-      appId: "1:98092548634:web:53a5b6f1c4bfd0e82f07a3"
-    };
+        // Firebase Configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyC7kBwCZeg0SEwCJETmX_MLIpeQVRxK1f4",
+          authDomain: "digital-score-board.firebaseapp.com",
+          databaseURL: "https://digital-score-board-default-rtdb.firebaseio.com",
+          projectId: "digital-score-board",
+          storageBucket: "digital-score-board.firebasestorage.app",
+          messagingSenderId: "98092548634",
+          appId: "1:98092548634:web:53a5b6f1c4bfd0e82f07a3"
+        };
 
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
-    const sportsRef = database.ref('sportsData');
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const sportsRef = database.ref('sportsData');
 
-    // നിങ്ങളുടെ പഴയ കോഡ് ഇവിടെ തുടരുന്നു
-    const categories = [
-        "Junior Boys", "Junior Girls",
-        ...
-        
         const categories = [
             "Junior Boys", "Junior Girls",
             "Sub Junior Boys", "Sub Junior Girls",
@@ -328,8 +323,7 @@
         const lpMiniEvents = ["50m", "100m", "Standing Broad Jump", "4x50m shuttle relay"];
 
         const eventsMap = {
-            "Junior Boys": ["100m", "200m", "400m", "800m", "1500m", "Long jump", "High jump", "Shot put", "Triple jump", "Pole vault", "Discus throw", "Javelin throw", "Hammer throw", "Walk", "4x100M relay"],
-            "Junior Girls": ["100m", "200m", "400m", "800m", "1500m", "3000m", "Hurdles", "Long jump", "High jump", "Triple jump", "Pole vault", "Shot put", "Discus throw", "Javelin throw", "Walk", "4x100m relay"],
+            "Junior Boys": ["100m", "200m", "400m", "800m", "1500m", "Long jump", "High jump", "Shot put", "Triple jump", "Pole vault", "Discus throw", "Javelin throw", "Walk", "4x100m relay"],
             "Sub Junior Boys": ["100m", "200m", "400m", "600m", "Hurdles", "Long jump", "High jump", "Shot put", "Discus throw", "4x100M relay"],
             "Sub Junior Girls": ["100m", "200m", "400m", "600m", "Hurdles", "Long jump", "High jump", "Shot put", "Discus throw", "4x100m relay"],
             "Kiddies Boys": kiddiesEvents,
@@ -341,13 +335,16 @@
         };
 
         const SECURITY_PIN = "1234";
-        let sportsData = JSON.parse(localStorage.getItem('ghs_sports_data')) || [];
+        let sportsData = [];
 
-        window.onload = function() {
+        // Firebase Realtime Listener (ഡാറ്റ മാറുമ്പോൾ സ്വയം UI അപ്‌ഡേറ്റ് ചെയ്യും)
+        sportsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            sportsData = data ? data : [];
             renderLeaderboard();
             renderCategoryOverview();
             renderResults();
-        };
+        });
 
         function openPinModal() {
             document.getElementById('pinModal').classList.remove('hidden');
@@ -388,7 +385,8 @@
             e.preventDefault();
             const category = document.getElementById('entryCategory').value;
             const event = document.getElementById('entryEvent').value;
-                        const entry = {
+            
+            const entry = {
                 id: Date.now(),
                 category,
                 event,
@@ -398,13 +396,12 @@
             };
 
             sportsData.unshift(entry);
-            localStorage.setItem('ghs_sports_data', JSON.stringify(sportsData));
+            
+            // Firebase-ലേക്ക് ഡാറ്റ സേവ് ചെയ്യുന്നു
+            sportsRef.set(sportsData);
 
             document.getElementById('scoreForm').reset();
             closeAdminModal();
-            renderLeaderboard();
-            renderCategoryOverview();
-            renderResults();
 
             document.getElementById('tickerText').innerText = `LATEST: [${entry.category}] ${entry.event} Winner: ${entry.first.name} (${entry.first.house} House)`;
         }
@@ -486,6 +483,7 @@
                 `;
             });
         }
+
         function renderResults() {
             const filter = document.getElementById('filterCategory').value;
             const container = document.getElementById('resultsList');
@@ -525,51 +523,46 @@
                 `;
             });
         }
+
         function deleteResult(id) {
             const enteredPin = prompt("Enter Admin Security PIN to delete this result:");
-            if (enteredPin === null) {
-                return; // User clicked Cancel
-            }
+            if (enteredPin === null) return;
+
             if (enteredPin === SECURITY_PIN) {
                 if(confirm("Are you sure you want to delete this result permanently?")) {
                     sportsData = sportsData.filter(d => d.id !== id);
-                    localStorage.setItem('ghs_sports_data', JSON.stringify(sportsData));
-                    renderLeaderboard();
-                    renderCategoryOverview();
-                    renderResults();
+                    // Firebase-ൽ നിന്ന് ഡാറ്റ അപ്ഡേറ്റ് ചെയ്യുന്നു
+                    sportsRef.set(sportsData);
                     alert("Result deleted successfully!");
                 }
             } else {
                 alert("Incorrect Admin Security PIN! Deletion failed.");
             }
         }
+
         function exportToPDF() {
-    const element = document.getElementById('pdf-content');
-    
-    if (!element) {
-        alert("Export Element Not Found!");
-        return;
-    }
+            const element = document.getElementById('pdf-content');
+            if (!element) {
+                alert("Export Element Not Found!");
+                return;
+            }
 
-    // PDF എക്സ്പോർട്ട് ചെയ്യുമ്പോൾ Action/Trash Column മറയ്ക്കുന്നു
-    const actionElements = element.querySelectorAll('.print\\:hidden, th:last-child, td:last-child');
-    actionElements.forEach(el => el.style.display = 'none');
+            const actionElements = element.querySelectorAll('.print\\:hidden, th:last-child, td:last-child');
+            actionElements.forEach(el => el.style.display = 'none');
 
-    const opt = {
-        margin:       0.3,
-        filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
+            const opt = {
+                margin:       0.3,
+                filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
 
-    html2pdf().set(opt).from(element).save().then(() => {
-        // PDF സേവ് ആയതിനു ശേഷം Action Column തിരികെ കാണിക്കുന്നു
-        actionElements.forEach(el => el.style.display = '');
-    });
-}
-       
-    </script>
+            html2pdf().set(opt).from(element).save().then(() => {
+                actionElements.forEach(el => el.style.display = '');
+            });
+        }
+            </script>                    
 </body>
 </html>
 
