@@ -539,29 +539,49 @@
                 alert("Incorrect Admin Security PIN! Deletion failed.");
             }
         }
-
-        function exportToPDF() {
-            const element = document.getElementById('pdf-content');
-            if (!element) {
-                alert("Export Element Not Found!");
-                return;
+function exportToPDF() {
+    // 1. ഫിൽട്ടർ ഡ്രോപ്ഡൗൺ, ആക്ഷൻ ബട്ടണുകൾ (Delete, Action columns) പ്രിന്റിൽ നിന്ന് മറയ്ക്കുന്നു
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @media print {
+            body * {
+                visibility: hidden;
             }
-
-            const actionElements = element.querySelectorAll('.print\\:hidden, th:last-child, td:last-child');
-            actionElements.forEach(el => el.style.display = 'none');
-
-            const opt = {
-                margin:       0.3,
-                filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(element).save().then(() => {
-                actionElements.forEach(el => el.style.display = '');
-            });
+            #pdf-content, #pdf-content * {
+                visibility: visible;
+            }
+            #pdf-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                color: #000 !important;
+                background: #fff !important;
+            }
+            .print\\:hidden, button, th:last-child, td:last-child {
+                display: none !important;
+            }
+            table {
+                width: 100% !important;
+                border-collapse: collapse !important;
+            }
+            th, td {
+                border: 1px solid #000 !important;
+                color: #000 !important;
+                padding: 6px !important;
+            }
         }
+    `;
+    document.head.appendChild(style);
+
+    // 2. ബ്രൗസറിന്റെ പ്രിന്റ് ഡയലോഗ് ഓപ്പൺ ചെയ്യുന്നു
+    window.print();
+
+    // 3. പ്രിന്റ് കഴിഞ്ഞ ശേഷം സ്റ്റൈൽ ടാഗ് നീക്കം ചെയ്യുന്നു
+    setTimeout(() => {
+        document.head.removeChild(style);
+    }, 1000);
+}
             </script>                    
 </body>
 </html>
