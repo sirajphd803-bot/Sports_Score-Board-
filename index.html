@@ -520,23 +520,32 @@
                 alert("Incorrect Admin Security PIN! Deletion failed.");
             }
         }
-        function exportPDF() {
-    const element = document.getElementById('pdf-content') || document.querySelector('.bg-white');
-            
-            if (!element) {
-                alert("Export Element Not Found!");
-                return;
-            }
-            
-        const opt = {
-            margin:       0.3,
-            filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true, logging: true },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-            html2pdf().set(opt).from(element).save();
-        }
+        function exportToPDF() {
+    const element = document.getElementById('pdf-content');
+    
+    if (!element) {
+        alert("Export Element Not Found!");
+        return;
+    }
+
+    // PDF എക്സ്പോർട്ട് ചെയ്യുമ്പോൾ Action/Trash Column മറയ്ക്കുന്നു
+    const actionElements = element.querySelectorAll('.print\\:hidden, th:last-child, td:last-child');
+    actionElements.forEach(el => el.style.display = 'none');
+
+    const opt = {
+        margin:       0.3,
+        filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        // PDF സേവ് ആയതിനു ശേഷം Action Column തിരികെ കാണിക്കുന്നു
+        actionElements.forEach(el => el.style.display = '');
+    });
+}
+       
     </script>
 </body>
 </html>
