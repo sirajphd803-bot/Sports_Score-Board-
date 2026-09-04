@@ -520,16 +520,24 @@
                 alert("Incorrect Admin Security PIN! Deletion failed.");
             }
         }
-        function exportToPDF() {
-            const element = document.getElementById('pdf-content');
-            const opt = {
-                margin:       0.5,
-                filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
+        function exportPDF() {
+    const element = document.getElementById('pdf-content'); // നിങ്ങളുടെ PDF കണ്ടെയ്നർ ID
+    
+    // ഫോണ്ടുകൾ പൂർണ്ണമായി ലോഡ് ആകും വരെ കാത്തുനിൽക്കാൻ
+    document.fonts.ready.then(function () {
+        const opt = {
+            margin:       0.5,
+            filename:     'GHS_TRIKKULAM_Sports_Results.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, logging: true },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        // 500ms താമസിപ്പിച്ച് PDF ഉണ്ടാക്കുക
+        setTimeout(() => {
             html2pdf().set(opt).from(element).save();
+        }, 500);
+    });
         }
     </script>
 </body>
