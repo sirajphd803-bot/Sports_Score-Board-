@@ -490,17 +490,24 @@
                 `;
             });
         }
-
         function deleteResult(id) {
-            if(confirm("Are you sure you want to delete this result?")) {
-                sportsData = sportsData.filter(d => d.id !== id);
-                localStorage.setItem('ghs_sports_data', JSON.stringify(sportsData));
-                renderLeaderboard();
-                renderCategoryOverview();
-                renderResults();
+            const enteredPin = prompt("Enter Admin Security PIN to delete this result:");
+            if (enteredPin === null) {
+                return; // User clicked Cancel
+            }
+            if (enteredPin === SECURITY_PIN) {
+                if(confirm("Are you sure you want to delete this result permanently?")) {
+                    sportsData = sportsData.filter(d => d.id !== id);
+                    localStorage.setItem('ghs_sports_data', JSON.stringify(sportsData));
+                    renderLeaderboard();
+                    renderCategoryOverview();
+                    renderResults();
+                    alert("Result deleted successfully!");
+                }
+            } else {
+                alert("Incorrect Admin Security PIN! Deletion failed.");
             }
         }
-
         function exportToPDF() {
             const element = document.getElementById('pdf-content');
             const opt = {
