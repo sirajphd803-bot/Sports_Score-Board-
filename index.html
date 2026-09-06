@@ -390,7 +390,7 @@ function saveResult(e) {
     const isDuplicate = sportsData.some(item => item.category === category && item.event === event);
 
     if (isDuplicate) {
-        alert(`Warning: [${category}] - ${event} റിസൾട്ട് ഇതിനകം എൻട്രി ചെയ്തിട്ടുണ്ട്! നിലവിലുള്ളത് ഡിലീറ്റ് ചെയ്ത ശേഷം പുതിയത് ചേർക്കുക.`);
+        alert(`Warning: [${category}] - ${event} result has already been entered!`);
         return; // ഡ്യൂപ്ലിക്കേറ്റ് ആണെങ്കിൽ ഇവിടെ വെച്ച് പ്രവർത്തനം നിർത്തും
     }
 
