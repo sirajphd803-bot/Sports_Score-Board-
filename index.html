@@ -381,32 +381,38 @@
                 });
             }
         }
+function saveResult(e) {
+    e.preventDefault();
+    const category = document.getElementById('entryCategory').value;
+    const event = document.getElementById('entryEvent').value;
 
-        function saveResult(e) {
-            e.preventDefault();
-            const category = document.getElementById('entryCategory').value;
-            const event = document.getElementById('entryEvent').value;
-            
-            const entry = {
-                id: Date.now(),
-                category,
-                event,
-                first: { name: document.getElementById('p1_name').value || 'Nil', class: document.getElementById('p1_class').value, house: document.getElementById('p1_house').value, pts: document.getElementById('p1_house').value === 'Nil' ? 0 : 5 },
-                second: { name: document.getElementById('p2_name').value || 'Nil', class: document.getElementById('p2_class').value, house: document.getElementById('p2_house').value, pts: document.getElementById('p2_house').value === 'Nil' ? 0 : 3 },
-                third: { name: document.getElementById('p3_name').value || 'Nil', class: document.getElementById('p3_class').value, house: document.getElementById('p3_house').value, pts: document.getElementById('p3_house').value === 'Nil' ? 0 : 1 }
-            };
+    // 1. ഒരേ Category-യും Event-ഉം നിലവിൽ തന്നെയുണ്ടോ എന്ന് പരിശോധിച്ച് തടയുന്നു
+    const isDuplicate = sportsData.some(item => item.category === category && item.event === event);
 
-            sportsData.unshift(entry);
-            
-            // Firebase-ലേക്ക് ഡാറ്റ സേവ് ചെയ്യുന്നു
-            sportsRef.set(sportsData);
+    if (isDuplicate) {
+        alert(`Warning: [${category}] - ${event} റിസൾട്ട് ഇതിനകം എൻട്രി ചെയ്തിട്ടുണ്ട്! നിലവിലുള്ളത് ഡിലീറ്റ് ചെയ്ത ശേഷം പുതിയത് ചേർക്കുക.`);
+        return; // ഡ്യൂപ്ലിക്കേറ്റ് ആണെങ്കിൽ ഇവിടെ വെച്ച് പ്രവർത്തനം നിർത്തും
+    }
 
-            document.getElementById('scoreForm').reset();
-            closeAdminModal();
+    const entry = {
+        id: Date.now(),
+        category,
+        event,
+        first: { name: document.getElementById('p1_name').value || 'Nil', class: document.getElementById('p1_class').value, house: document.getElementById('p1_house').value, pts: document.getElementById('p1_house').value === 'Nil' ? 0 : 5 },
+        second: { name: document.getElementById('p2_name').value || 'Nil', class: document.getElementById('p2_class').value, house: document.getElementById('p2_house').value, pts: document.getElementById('p2_house').value === 'Nil' ? 0 : 3 },
+        third: { name: document.getElementById('p3_name').value || 'Nil', class: document.getElementById('p3_class').value, house: document.getElementById('p3_house').value, pts: document.getElementById('p3_house').value === 'Nil' ? 0 : 1 }
+    };
 
-            document.getElementById('tickerText').innerText = `LATEST: [${entry.category}] ${entry.event} Winner: ${entry.first.name} (${entry.first.house} House)`;
-        }
+    sportsData.unshift(entry);
+    
+    // Firebase-ലേക്ക് ഡാറ്റ സേവ് ചെയ്യുന്നു
+    sportsRef.set(sportsData);
 
+    document.getElementById('scoreForm').reset();
+    closeAdminModal();
+
+    document.getElementById('tickerText').innerText = `LATEST: [${entry.category}] ${entry.event} Winner: ${entry.first.name} (${entry.first.house} House)`;
+}
         function calculateOverallScores() {
             const totals = { Blue: 0, Green: 0, Red: 0, Yellow: 0 };
             sportsData.forEach(item => {
