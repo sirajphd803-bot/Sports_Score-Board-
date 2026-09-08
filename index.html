@@ -61,7 +61,7 @@
                             <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> LIVE
                         </span>
                     </h1>
-                    <p class="text-xs text-slate-400 font-semibold">Annual Sports Meet 2026-27 • <span class="text-amber-400">Powered by Little Kites</span></p>
+                    <p class="text-xs text-slate-400 font-semibold">Annual Sports Meet 2026-27 • <span class="text-amber-400">Powered by Little Kites GHS Trikkulam</span></p>
                 </div>
             </div>
 
@@ -129,6 +129,7 @@
                     <option value="LP Kiddies Girls">LP Kiddies Girls</option>
                     <option value="LP Mini Boys">LP Mini Boys</option>
                     <option value="LP Mini Girls">LP Mini Girls</option>
+                    <option value="Common">Common</option>
                 </select>
             </div>
 
@@ -214,6 +215,7 @@
                             <option value="LP Kiddies Girls">LP Kiddies Girls</option>
                             <option value="LP Mini Boys">LP Mini Boys</option>
                             <option value="LP Mini Girls">LP Mini Girls</option>
+                             <option value="Common">Common</option>
                         </select>
                     </div>
 
@@ -315,7 +317,7 @@
             "Sub Junior Boys", "Sub Junior Girls",
             "Kiddies Boys", "Kiddies Girls",
             "LP Kiddies Boys", "LP Kiddies Girls",
-            "LP Mini Boys", "LP Mini Girls"
+            "LP Mini Boys", "LP Mini Girls", "Common"
         ];
 
         const kiddiesEvents = ["100m", "200m", "Long jump", "High jump", "4X100m relay"];
@@ -323,8 +325,8 @@
         const lpMiniEvents = ["50m", "100m", "Standing Broad Jump", "4x50m shuttle relay"];
 
         const eventsMap = {
-            "Junior Boys": ["100m", "200m", "400m", "800m", "1500m", "Long jump", "High jump", "Shot put", "Triple jump", "Pole vault", "Discus throw", "Javelin throw", "Walk", "4x100m relay"],
-            "Junior Girls": ["100m", "200m", "400m", "800m", "1500m", "Long jump", "High jump", "Shot put", "Triple jump", "Hardles", "Discus throw", "Javelin throw", "Walk", "4x100m relay"],
+            "Junior Boys": ["100m", "200m", "400m", "800m", "1500m", "3000", "Long jump", "High jump", "Shot put", "Triple jump", "Pole vault","Hardles" "Discus throw", "Javelin throw", "Walk", "4x100m relay"],
+            "Junior Girls": ["100m", "200m", "400m", "800m", "1500m", "3000", "Long jump", "High jump", "Shot put", "Triple jump", "Hardles","Pole vault" "Discus throw", "Javelin throw", "Walk", "4x100m relay"],
             "Sub Junior Boys": ["100m", "200m", "400m", "600m", "Hurdles", "Long jump", "High jump", "Shot put", "Discus throw", "4x100M relay"],
             "Sub Junior Girls": ["100m", "200m", "400m", "600m", "Hurdles", "Long jump", "High jump", "Shot put", "Discus throw", "4x100m relay"],
             "Kiddies Boys": kiddiesEvents,
@@ -332,10 +334,11 @@
             "LP Kiddies Boys": lpKiddiesEvents,
             "LP Kiddies Girls": lpKiddiesEvents,
             "LP Mini Boys": lpMiniEvents,
-            "LP Mini Girls": lpMiniEvents
+            "LP Mini Girls": lpMiniEvents,
+            "Commom": ["March Past"]
         };
 
-        const SECURITY_PIN = "1234";
+        const SECURITY_PIN = "7887";
         let sportsData = [];
 
         // Firebase Realtime Listener (ഡാറ്റ മാറുമ്പോൾ സ്വയം UI അപ്‌ഡേറ്റ് ചെയ്യും)
