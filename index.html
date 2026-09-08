@@ -92,7 +92,7 @@
                         <i class="fa-solid fa-trophy text-amber-400"></i> House Championship Leaderboard
                     </h2>
                 </div>
-                <span class="text-[11px] text-slate-500 font-semibold">1st: 5 PTS | 2nd: 3 PTS | 3rd: 1 PT(March Past: 15, 10, 5)</span>
+                <span class="text-[11px] text-slate-500 font-semibold">Individual: 5,3,1 | Relay: 10,5,3 | March Past: 15, 10, 5</span>
             </div>
 
             <div id="leaderboardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -396,11 +396,21 @@ function saveResult(e) {
         return; 
     }
 
-    // March Past ആണോ എന്ന് നോക്കി പോയിന്റുകൾ നിശ്ചയിക്കുന്നു
+ // Event തരം പരിശോധിച്ച് പോയിന്റുകൾ നിശ്ചയിക്കുന്നു
     const isMarchPast = (category === 'Common' && event === 'March Past');
-    const p1_pts = isMarchPast ? 15 : 5;
-    const p2_pts = isMarchPast ? 10 : 3;
-    const p3_pts = isMarchPast ? 5 : 1;
+    const isRelay = event.toLowerCase().includes('relay'); // 4x100m relay, 4x50m shuttle relay എന്നിവ കണ്ടെത്തും
+
+    let p1_pts = 5, p2_pts = 3, p3_pts = 1;
+
+    if (isMarchPast) {
+        p1_pts = 15;
+        p2_pts = 10;
+        p3_pts = 5;
+    } else if (isRelay) {
+        p1_pts = 10;
+        p2_pts = 5;
+        p3_pts = 3;
+    }
 
     const entry = {
         id: Date.now(),
