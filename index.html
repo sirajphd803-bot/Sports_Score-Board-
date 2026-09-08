@@ -92,7 +92,7 @@
                         <i class="fa-solid fa-trophy text-amber-400"></i> House Championship Leaderboard
                     </h2>
                 </div>
-                <span class="text-[11px] text-slate-500 font-semibold">1st: 5 PTS | 2nd: 3 PTS | 3rd: 1 PT</span>
+                <span class="text-[11px] text-slate-500 font-semibold">1st: 5 PTS | 2nd: 3 PTS | 3rd: 1 PT(March Past: 15, 10, 5)</span>
             </div>
 
             <div id="leaderboardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -396,6 +396,12 @@ function saveResult(e) {
         alert(`Warning: [${category}] - ${event} result has already been entered! Please enter the next result.`);
         return; // ഡ്യൂപ്ലിക്കേറ്റ് ആണെങ്കിൽ ഇവിടെ വെച്ച് പ്രവർത്തനം നിർത്തും
     }
+    const isMarchPast = (category === 'Common' && event === 'March Past');
+    const p1_pts = isMarchPast ? 15 : 5;
+    const p2_pts = isMarchPast ? 10 : 3;
+    const p3_pts = isMarchPast ? 5 : 1;
+
+    
 
     const entry = {
         id: Date.now(),
@@ -512,19 +518,19 @@ function saveResult(e) {
                         <td class="p-2 border border-slate-300 text-center font-bold">${index + 1}</td>
                         <td class="p-2 border border-slate-300 font-bold">${item.category}</td>
                         <td class="p-2 border border-slate-300 font-semibold">${item.event}</td>
-                        <td class="p-2 border border-slate-300">
-                            <span class="font-bold">${item.first.name}</span> <br>
-                            <span class="text-[10px] text-slate-500">${item.first.house} House ${item.first.class ? '(' + item.first.class + ')' : ''}</span>
-                        </td>
-                        <td class="p-2 border border-slate-300">
-                            <span class="font-bold">${item.second.name}</span> <br>
-                            <span class="text-[10px] text-slate-500">${item.second.house} House ${item.second.class ? '(' + item.second.class + ')' : ''}</span>
-                        </td>
-                        <td class="p-2 border border-slate-300">
-                            <span class="font-bold">${item.third.name}</span> <br>
-                            <span class="text-[10px] text-slate-500">${item.third.house} House ${item.third.class ? '(' + item.third.class + ')' : ''}</span>
-                        </td>
-                        <td class="p-2 border border-slate-300 text-center">
+                      <td class="p-2 border border-slate-300">
+    <span class="font-bold">${item.first.name}</span> <span class="text-[10px] bg-amber-100 text-amber-800 font-bold px-1 rounded">(${item.first.pts} Pts)</span><br>
+    <span class="text-[10px] text-slate-500">${item.first.house} House ${item.first.class ? '(' + item.first.class + ')' : ''}</span>
+</td>
+<td class="p-2 border border-slate-300">
+    <span class="font-bold">${item.second.name}</span> <span class="text-[10px] bg-slate-100 text-slate-800 font-bold px-1 rounded">(${item.second.pts} Pts)</span><br>
+    <span class="text-[10px] text-slate-500">${item.second.house} House ${item.second.class ? '(' + item.second.class + ')' : ''}</span>
+</td>
+<td class="p-2 border border-slate-300">
+    <span class="font-bold">${item.third.name}</span> <span class="text-[10px] bg-amber-50 text-amber-900 font-bold px-1 rounded">(${item.third.pts} Pts)</span><br>
+    <span class="text-[10px] text-slate-500">${item.third.house} House ${item.third.class ? '(' + item.third.class + ')' : ''}</span>
+</td>
+<td class="p-2 border border-slate-300 text-center print:hidden">
                             <button onclick="deleteResult(${item.id})" class="text-red-600 hover:text-red-800 text-xs px-2 py-1 bg-red-50 rounded border border-red-200">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
