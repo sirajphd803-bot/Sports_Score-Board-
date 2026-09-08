@@ -398,7 +398,8 @@ function saveResult(e) {
 
  // Event തരം പരിശോധിച്ച് പോയിന്റുകൾ നിശ്ചയിക്കുന്നു
     const isMarchPast = (category === 'Common' && event === 'March Past');
-    const isRelay = event.toLowerCase().includes('relay'); // 4x100m relay, 4x50m shuttle relay എന്നിവ കണ്ടെത്തും
+    const eventLower = event.toLowerCase();
+    const isRelay = eventLower.includes('relay') || eventLower.includes('shuttle')  // 4x100m relay, 4x50m shuttle relay എന്നിവ കണ്ടെത്തും
 
     let p1_pts = 5, p2_pts = 3, p3_pts = 1;
 
